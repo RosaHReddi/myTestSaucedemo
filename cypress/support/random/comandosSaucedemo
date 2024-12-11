@@ -1,0 +1,40 @@
+Cypress.Commands.add('login', (username, password) => {
+  cy.visit('https://www.saucedemo.com');
+    cy.get('[data-test="username"]').type(username);
+    cy.get('[data-test="password"]').type(password);
+    cy.get('[data-test="login-button"]').click();
+  });
+  
+  Cypress.Commands.add('logout', () => {
+    cy.get('.bm-burger-button').click();
+    cy.get('#logout_sidebar_link').click();
+  });
+  
+  Cypress.Commands.add('addToCartAndCheckout', () => {
+     cy.get('.inventory_item').each(($el) => {
+      cy.wrap($el).find('.btn_inventory').click({ force: true });
+      cy.get('.shopping_cart_badge').should('not.be.empty'); // Verifica que el carrito no esté vacío.
+    });
+
+    cy.get('.shopping_cart_link').click();
+    cy.get('[data-test="checkout"]').click();
+    cy.get('[data-test="firstName"]').type('Rosa');
+    cy.get('[data-test="lastName"]').type('Reddi');
+    cy.get('[data-test="postalCode"]').type('12345');
+    cy.get('[data-test="continue"]').click();
+    cy.get('[data-test="finish"]').click();
+    cy.contains(/thank you for your order!/i).should('be.visible');
+  });
+
+
+  Cypress.Commands.add('testFilter', () => {
+//   cy.get('.product_sort_container')
+    cy.get('.product_sort_container', { timeout: 10000 })
+      .select('Price (low to high)')
+   });
+
+  
+  
+  
+
+
